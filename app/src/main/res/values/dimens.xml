@@ -1,0 +1,11 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="drop_corner_radius">44dp</dimen>
+    <dimen name="drop_size">88dp</dimen>
+   <dimen name="fastscroll_track_radius">2dp</dimen>
+    <dimen name="fastscroll_track_height">32dp</dimen>
+    <dimen name="fastscroll_track_width">4dp</dimen>
+
+</resources>
