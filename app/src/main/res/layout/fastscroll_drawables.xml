@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
-    <ImageButton
+    <TextView
+        android:id="@+id/drop"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:background="@drawable/drop_img"/>
-        <!--android:elevation="10dp"/>-->
-        <!--android:visibility="invisible"-->
-        <!--/>-->
+        android:background="@drawable/drop_img"
+        android:elevation="10dp"
+        android:visibility="visible"
+        android:text="text"
+        android:textSize="20sp"
+        android:textColor="#ffffff"
+        android:gravity="center"
+        />
 
     <ImageView
+        android:id="@+id/track"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:background="@drawable/fast_scroll_track"
         />
+
+
 
 
 </merge>
