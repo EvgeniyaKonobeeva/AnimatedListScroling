@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -115,11 +116,30 @@ public class FastScroller extends LinearLayout {
 
         float proportion = y/height;
         int dropHeight = drop.getHeight();
-        drop.setY((int)((height - dropHeight)*proportion));
         int trackHeight = track.getHeight();
-        track.setY((int)((height - trackHeight)*proportion));
+
+        track.setY(getValueInRange(0 , height - trackHeight, (int)((height)*proportion)));
+
+        drop.setY(getValueInRange(0, height - dropHeight, (int)track.getY()- dropHeight));
+
+        Log.d(TAG, "from method position to drop = " + (int)((height - trackHeight)*proportion));
+        getText();
+
+    }
+
+    public void setPositionFromRecyclerView(float y){
+
+        float proportion = y/height;
+        int dropHeight = drop.getHeight();
+        int trackHeight = track.getHeight();
+
+        track.setY(getValueInRange(0 , height - trackHeight, (int)((height - trackHeight)*proportion)));
+
+        drop.setY(track.getY()- dropHeight);
+
         Log.d(TAG, "from method position to drop = " + (int)((height - trackHeight)*proportion));
 
+        getText();
     }
 
     private int getValueInRange(int min, int max, int val){
@@ -129,30 +149,24 @@ public class FastScroller extends LinearLayout {
 
     private ScrollListener scrollListener = new ScrollListener();
 
+
     public void setRecyclerView(RecyclerView rw){
         this.recyclerView = rw;
-        rw.addOnScrollListener(scrollListener);
-    }
+        recyclerView.addOnScrollListener(scrollListener);
 
-    public class ScrollListener1 extends RecyclerView.OnScrollListener{
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-
-            super.onScrolled(recyclerView, dx, dy);
-        }
     }
 
     public class ScrollListener extends RecyclerView.OnScrollListener {
         @Override
         public void onScrolled(RecyclerView rv, int dx, int dy) {
-            View firstVisibleView = recyclerView.getChildAt(2);
-            int firstVisiblePosition = recyclerView.getChildPosition(firstVisibleView);
+            View firstVisibleView = rv.getChildAt(0);
+            int firstVisiblePosition = rv.getChildPosition(firstVisibleView);
 
-            int visibleRange = recyclerView.getChildCount();
-            int lastVisiblePosition = firstVisiblePosition + visibleRange;
-            int itemCount = recyclerView.getAdapter().getItemCount();
+            int visibleRange = rv.getChildCount();
+            int lastVisiblePosition = firstVisiblePosition + visibleRange-1;
+            int itemCount = rv.getAdapter().getItemCount();
             int position;
-            if (firstVisiblePosition == 2) {
+            if (firstVisiblePosition == 0) {
                 position = 0;
             } else if (lastVisiblePosition == itemCount - 1) {
                 position = itemCount - 1;
@@ -160,9 +174,24 @@ public class FastScroller extends LinearLayout {
                 position = firstVisiblePosition;
             }
             float proportion = (float) position / (float) itemCount;
-            Log.d(TAG, "from listener position to drop = " + height * proportion);
-            setPosition(height * proportion);
+//            Log.d(TAG, "from listener position to drop = " + height * proportion);
+            setPosition(height*proportion);
+
+////            int fp = ((LinearLayoutManager)rv.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+//            int lp = ((LinearLayoutManager)rv.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+//            RecyclerView.ViewHolder vh = rv.findViewHolderForAdapterPosition(lp);
+//            String s = ((MyAdapter.MyViewHolder)vh).textView.getText().toString();
+//            String ss = s.substring(0, 1).toUpperCase();
+//            drop.setText(ss);
         }
+    }
+
+    public void getText(){
+        int lp = ((LinearLayoutManager)recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+        RecyclerView.ViewHolder vh = recyclerView.findViewHolderForAdapterPosition(lp);
+        String s = ((MyAdapter.MyViewHolder)vh).textView.getText().toString();
+        String ss = s.substring(0, 1).toUpperCase();
+        drop.setText(ss);
     }
 
     private static final int HANDLE_HIDE_DELAY = 250;
@@ -184,7 +213,6 @@ public class FastScroller extends LinearLayout {
             }
             setRecyclerViewPosition(event.getY());
             recyclerView.clearOnScrollListeners();
-            recyclerView.addOnScrollListener(new ScrollListener1());
             return true;
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
             recyclerView.addOnScrollListener(scrollListener);
@@ -218,5 +246,7 @@ public class FastScroller extends LinearLayout {
             recyclerView.scrollToPosition(targetPos);
         }
     }
+
+
 
 }

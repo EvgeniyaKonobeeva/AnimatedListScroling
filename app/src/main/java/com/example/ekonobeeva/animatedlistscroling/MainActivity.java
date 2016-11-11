@@ -18,13 +18,24 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ArrayList<String> list = new ArrayList<>();
-        for(int i = 0; i < 50; i++){
-            list.add("position " + i);
+        for(int i = 0; i < 25; i++){
+            list.add("Aposition " + i);
         }
+        for(int i = 25; i < 50; i++){
+            list.add("Bposition " + i);
+        }
+        for(int i = 50; i < 75; i++){
+            list.add("Cposition " + i);
+        }
+        for(int i = 75; i < 100; i++){
+            list.add("Dposition " + i);
+        }
+
 
         recyclerView =(RecyclerView)findViewById(R.id.recyclerWiew);
         recyclerView.setAdapter(new MyAdapter(list));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        recyclerView.addItemDecoration(new RVItemDecorator(this, 6, 3));
 
         fastScroller = (FastScroller)findViewById(R.id.fastScroller);
         fastScroller.setRecyclerView(recyclerView);

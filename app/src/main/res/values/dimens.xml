@@ -7,5 +7,8 @@
    <dimen name="fastscroll_track_radius">2dp</dimen>
     <dimen name="fastscroll_track_height">32dp</dimen>
     <dimen name="fastscroll_track_width">4dp</dimen>
+    <dimen name="fast_scroll_path_width">2dp</dimen>
+    <dimen name="to_middle_of_track">1dp</dimen>
+    <dimen name="drop_text_size">20sp</dimen>
 
 </resources>
