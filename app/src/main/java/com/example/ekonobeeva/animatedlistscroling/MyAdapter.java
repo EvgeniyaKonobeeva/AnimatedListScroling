@@ -13,7 +13,9 @@ import java.util.ArrayList;
  */
 
 public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private ArrayList<String> list;
+    public static int SINGLE_SYM = 1;
+    public static int WORD = 2;
+    public ArrayList<String> list;
 
     public MyAdapter(ArrayList<String> list) {
         this.list = list;
@@ -21,7 +23,12 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        return super.getItemViewType(position);
+        if(list.get(position).matches("[A-Z]")){
+            return SINGLE_SYM;
+        }else {
+            return WORD;
+        }
+
     }
 
     @Override
@@ -49,4 +56,8 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             textView = (TextView)rootView.findViewById(R.id.item_text);
         }
     }
+
+
+
+
 }

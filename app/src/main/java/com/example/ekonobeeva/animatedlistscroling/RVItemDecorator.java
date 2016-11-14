@@ -16,8 +16,8 @@ import android.view.View;
 public class RVItemDecorator extends RecyclerView.ItemDecoration {
 
     private final Drawable mDivider;
-    float verticalOffset;
-    float horizontalOffset;
+    int verticalOffset;
+    int horizontalOffset;
     Paint paint;
 
 
@@ -40,26 +40,25 @@ public class RVItemDecorator extends RecyclerView.ItemDecoration {
 
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-        super.onDraw(c, parent, state);
     }
 
     @Override
     public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
-        int left = 5;
-        int right = parent.getWidth();
+        int left = horizontalOffset;
+        int right = parent.getWidth() - left;
 
         int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++) {
             View child = parent.getChildAt(i);
+            if(parent.getAdapter().getItemViewType(parent.getChildAdapterPosition(child)) == MyAdapter.WORD) {
 
-            RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
+                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
+                int top = child.getBottom() + params.bottomMargin;
+                int bottom = top + mDivider.getIntrinsicHeight();
 
-            int top = child.getBottom() + params.bottomMargin;
-            int bottom = top + 2;
-
-            mDivider.setBounds(left, top, right, bottom);
-            mDivider.draw(c);
+                mDivider.setBounds(left, top, right, bottom);
+                mDivider.draw(c);
+            }
         }
-
     }
 }
