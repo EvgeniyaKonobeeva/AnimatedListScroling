@@ -21,6 +21,11 @@ import android.widget.TextView;
  */
 
 public class FastScroller extends LinearLayout {
+
+    public interface FastScrollAdapter{
+        String getLetter(int position);
+    }
+
     private static final int HANDLE_ANIMATION_DURATION = 100;
 
     private static final String SCALE_X = "scaleX";
@@ -32,6 +37,9 @@ public class FastScroller extends LinearLayout {
     private TextView drop;
     private ImageView track;
     private RecyclerView recyclerView;
+    private boolean showText = true;
+    private AnimatorSet currentAnimator = null;
+    private ScrollListener scrollListener = new ScrollListener();
 
 
 
@@ -63,9 +71,13 @@ public class FastScroller extends LinearLayout {
 
     }
 
+    public void showTextEnabled(boolean b){
+        showText = b;
+    }
 
-
-    private AnimatorSet currentAnimator = null;
+    public boolean isShowText() {
+        return showText;
+    }
 
     public void showHandle() {
         AnimatorSet animatorSet = new AnimatorSet();
@@ -121,23 +133,18 @@ public class FastScroller extends LinearLayout {
 
         drop.setY(getValueInRange(0, height - dropHeight, (int)track.getY()- dropHeight));
 
-        getText();
+        setText();
 
     }
-
 
     private float getValueInRange(float min, float max, float val){
         float mm = Math.max(min, val);
         return Math.min(mm, max);
     }
 
-    private ScrollListener scrollListener = new ScrollListener();
-
-
     public void setRecyclerView(RecyclerView rw){
         this.recyclerView = rw;
         recyclerView.addOnScrollListener(scrollListener);
-
     }
 
     public class ScrollListener extends RecyclerView.OnScrollListener {
@@ -146,6 +153,7 @@ public class FastScroller extends LinearLayout {
 
         @Override
         public void onScrolled(RecyclerView rv, int dx, int dy) {
+            super.onScrolled(rv, dx, dy);
 
             int position;
             int firstVisiblePosition = ((LinearLayoutManager) rv.getLayoutManager()).findFirstVisibleItemPosition();
@@ -177,10 +185,7 @@ public class FastScroller extends LinearLayout {
                 float pos = height*proportion;
                 setPosition(pos);
 
-
-
             } else{
-
 
                 int itemCount = rv.getAdapter().getItemCount();
                 if(itemCount < 100){
@@ -193,7 +198,7 @@ public class FastScroller extends LinearLayout {
                 } else if (lastVisiblePosition == itemCount - 1) {
                     position = (itemCount - 1)/increaseProportion;
                 } else {
-                    position = curPos;
+                    position = firstVisiblePosition;
                 }
                 float proportion = (float) position / ((float) itemCount)/increaseProportion;
                 setPosition(height*proportion);
@@ -202,12 +207,14 @@ public class FastScroller extends LinearLayout {
         }
     }
 
-    public void getText(){
-        int lp = ((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-        RecyclerView.ViewHolder vh = recyclerView.findViewHolderForAdapterPosition(lp);
-        String s = ((MyAdapter.MyViewHolder)vh).textView.getText().toString();
-        String ss = s.substring(0, 1).toUpperCase();
-        drop.setText(ss);
+    public void setText(){
+        if(showText){
+            int lp = ((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+//            View child = recyclerView.getChildAt(lp);
+//            int pos = recyclerView.getChildAdapterPosition(child);
+            drop.setText(((FastScrollAdapter)recyclerView.getAdapter()).getLetter(lp));
+        }
+
     }
 
     private static final int HANDLE_HIDE_DELAY = 250;
@@ -252,7 +259,6 @@ public class FastScroller extends LinearLayout {
             recyclerView.scrollToPosition(targetPos);
         }
     }
-
 
 
 }

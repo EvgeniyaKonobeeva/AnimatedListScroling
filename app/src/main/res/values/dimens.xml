@@ -2,13 +2,24 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!--drop with letter-->
     <dimen name="drop_corner_radius">44dp</dimen>
     <dimen name="drop_size">88dp</dimen>
+
+    <!--track ползунок-->
    <dimen name="fastscroll_track_radius">2dp</dimen>
     <dimen name="fastscroll_track_height">32dp</dimen>
     <dimen name="fastscroll_track_width">4dp</dimen>
+
+
     <dimen name="fast_scroll_path_width">2dp</dimen>
     <dimen name="to_middle_of_track">1dp</dimen>
+
+    <!--text in drop-->
     <dimen name="drop_text_size">20sp</dimen>
+
+    <dimen name="item_tv_height">48dp</dimen>
+    <dimen name="item_single_sym_height">36dp</dimen>
 
 </resources>
